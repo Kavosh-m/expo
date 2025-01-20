@@ -4,6 +4,14 @@ private var reactDelegateHandlers = [ExpoReactDelegateHandler]()
 
 @objc(EXAppInstance)
 open class ExpoAppInstance: RCTAppDelegate {
+  /**
+   Whether to skip calling the React Native instance setup from `RCTAppDelegate`.
+   Set this property to `false` if your app delegate is not supposed to initialize a React Native app,
+   but only to handle the app delegate subscribers.
+   */
+  @objc
+  public var shouldCallReactNativeSetup: Bool = true
+  
   @objc
   public let reactDelegate = ExpoReactDelegate(handlers: reactDelegateHandlers)
 
@@ -19,6 +27,24 @@ open class ExpoAppInstance: RCTAppDelegate {
     return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
   }
+
+   open override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    self.reactNativeFactory = ExpoReactNativeFactory.init(delegate: self)
+
+    if shouldCallReactNativeSetup {
+      super.application(application, didFinishLaunchingWithOptions: launchOptions)
+      if (self.automaticallyLoadReactNativeWindow) {
+        super.loadReactNativeWindow(launchOptions ?? [:])
+      }
+    }
+
+    return true
+  }
+
+
 
   @objc
   open override func createRCTRootViewFactory() -> RCTRootViewFactory {

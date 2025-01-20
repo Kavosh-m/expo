@@ -6,6 +6,7 @@
 
 @implementation RCTAppDelegate (Recreate)
 
+
 - (UIView *)recreateRootViewWithBundleURL:(nullable NSURL *)bundleURL
                                moduleName:(nullable NSString *)moduleName
                              initialProps:(nullable NSDictionary *)initialProps

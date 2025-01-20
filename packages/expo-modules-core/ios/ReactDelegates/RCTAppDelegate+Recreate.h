@@ -8,6 +8,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface RCTAppDelegate (Recreate)
 
+
+- (void)loadReactNativeWindow:(NSDictionary *)launchOptions;
+
 #if !TARGET_OS_OSX
 /**
  Recreates a root view bound with customized bundleURL, moduleName, initialProps, and launchOptions.

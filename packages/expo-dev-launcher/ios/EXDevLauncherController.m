@@ -8,7 +8,6 @@
 #import <React/RCTConstants.h>
 #import <React/RCTKeyCommands.h>
 
-#import <ExpoModulesCore/RCTAppDelegate+Recreate.h>
 #import <EXDevLauncher/EXDevLauncherController.h>
 #import <EXDevLauncher/EXDevLauncherRCTBridge.h>
 #import <EXDevLauncher/EXDevLauncherManifestParser.h>
@@ -281,11 +280,11 @@
       if (!self) {
         return;
       }
-      
+
       [self navigateToLauncher];
     });
   };
-  
+
   NSURL* initialUrl = [EXDevLauncherController initialUrlFromProcessInfo];
   if (initialUrl) {
     [self loadApp:initialUrl withProjectUrl:nil onSuccess:nil onError:navigateToLauncher];
@@ -341,7 +340,7 @@
   // Reset app react host
   [self.delegate destroyReactInstance];
 
-  _appDelegate.rootViewFactory = [_appDelegate createRCTRootViewFactory];
+  _appDelegate.reactNativeFactory = [[RCTReactNativeFactory alloc] initWithDelegate:_appDelegate];
 
 #if RCT_DEV
   NSURL *url = [self devLauncherURL];
@@ -845,7 +844,7 @@
   NSProcessInfo *processInfo = [NSProcessInfo processInfo];
   NSArray *arguments = [processInfo arguments];
   BOOL nextIsUrl = NO;
-  
+
   for (NSString *arg in arguments) {
     if (nextIsUrl) {
       NSURL *url = [NSURL URLWithString:arg];
